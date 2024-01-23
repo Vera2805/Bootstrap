@@ -16,8 +16,8 @@
             <span class="navbar-header">
                 <span th:text="${username}"></span>
                 <span> with roles: </span>
-                <span th:each="role : ${roles}"
-                      th:text="${role.toString().replace('ROLE_ADMIN','ADMIN').replace('ROLE_USER','USER')}">
+                <span th:each="role : ${role}"
+                      th:text="${role.getName().replace('ROLE_', '') + ' '}">
                 </span>
             </span>
             <ul class="navbar-nav ml-auto">
@@ -33,9 +33,9 @@
 <div class="container-fluid">
     <div class="row">
 
-        <!--- на странице будет 2 колонки шириной 3 и 9 (макс.ширина 12)--->
+
         <div class="col-1">
-            <!--- Устанавливаем навигацию с вертикальными "подушками"--->
+
             <div aria-orientation="vertical" class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
 
                 <a aria-controls="v-pills-admin" aria-selected="true"
@@ -70,7 +70,6 @@
 
                         </nav>
 
-                        <!--User's List-->
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" aria-labelledby="nav-users_table-tab"
                                  id="nav-users_table"
@@ -90,16 +89,15 @@
                                         <td th:text="${user.getId()}">Id</td>
                                         <td th:text="${user.getEmail()}">Email</td>
                                         <td th:text="${user.getUsername()}">Login</td>
-                                        <td th:text="${user.getRoles()}">Role</td>
+                                        <td th:text="${user.getAllRolesToString()}">Role</td>
 
-
-                                        <!--Кнопки для открытия модальных окон-->
                                         <td>
                                             <a class="btn btn-primary" th:href="@{/user/{id}(id=${user.getId()})}"
                                                data-toggle="modal" data-target="#editModal"
                                                th:data-target="${'#editModal'+user.getId()}">Edit
                                             </a>
                                         </td>
+
                                         <td>
                                             <a class="btn btn-danger" th:href="@{/delete/{id}(id=${user.getId()})}"
                                                data-toggle="modal" data-target="#deleteModal"
@@ -125,7 +123,7 @@
 
                                                     <!-- Тело модального окна Edit -->
                                                     <form th:action="@{/user/{id} (id=${user.getId()})}"
-                                                          th:method="POST"
+                                                          th:method="PATCH"
                                                           th:object="${user}">
                                                         <div class="modal-body text-center">
                                                             <br>
@@ -159,12 +157,12 @@
                                                             <select aria-label="Default select example"
                                                                     class="form-select"
                                                                     th:name="roles" required multiple>
-                                                                <option th:each="role : ${getRoles}"
+                                                                <option th:each="role : ${allRoles}"
                                                                         th:value="${role.getId()}"
+                                                                        th:switch="${role.getName()}"
                                                                         th:attr="multiple=${true}">
                                                                     <span th:case="'ROLE_ADMIN'">ADMIN</span>
                                                                     <span th:case="'ROLE_USER'">USER</span>
-
                                                                 </option>
                                                             </select>
 
@@ -175,7 +173,7 @@
                                                                         type="button">Close
                                                                 </button>
                                                                 <button class="btn btn-primary" type="submit"
-                                                                        value="Save">Save
+                                                                        value="Edit">Save
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -288,7 +286,7 @@
                                                     <select aria-label="Default select example"
                                                             class="form-select"
                                                             th:name="roles" required multiple>
-                                                        <option th:each="role : ${Roles}"
+                                                        <option th:each="role : ${allRoles}"
                                                                 th:value="${role.getId()}"
                                                                 th:switch="${role.getName()}"
                                                                 th:attr="multiple=${true}">
@@ -309,6 +307,8 @@
                                                         type="button">Close</button>
                                             </div>
                                         </div>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -318,7 +318,7 @@
             </div>
         </div>
     </div>
-</div>
+
 
     <script crossorigin="anonymous"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -331,6 +331,6 @@
             src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 
-</body>
+   </body>
 
 </html>

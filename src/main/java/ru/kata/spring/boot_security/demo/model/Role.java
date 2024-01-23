@@ -9,7 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "roles")
@@ -24,8 +27,7 @@ public class Role implements GrantedAuthority {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
-
-    public Role() {
+    public Role(String role_admin, String role_user) {
     }
 
     public Role(String name) {
@@ -35,6 +37,10 @@ public class Role implements GrantedAuthority {
     public Role(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public Role() {
+
     }
 
     public void save() {
@@ -69,6 +75,7 @@ public class Role implements GrantedAuthority {
     public void setUsers(Set<User> users) {
         this.users = users;
     }
+
     @Override
     public String toString() {
         return name;

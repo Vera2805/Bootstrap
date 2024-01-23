@@ -25,5 +25,7 @@ public interface RoleService {
     void save(Role role);
 
 
+    Set<String> getAllRoleNames();
 
+    Set<Role> findAll();
 }

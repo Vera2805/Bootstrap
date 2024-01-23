@@ -8,8 +8,6 @@ import ru.kata.spring.boot_security.demo.model.User;
 import java.util.Set;
 
 public interface UserDao {
-   //   User findByEmail(String email);
-
 
     void addUser(User user);
 
@@ -34,6 +32,13 @@ public interface UserDao {
 
 
     User findUsername(String username);
+
+    User findByUsername(String username);
+
+    void deleteById(Long id);
+
+    Set<User> findAll();
+
 }
 
 
