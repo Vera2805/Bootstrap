@@ -1,9 +1,11 @@
 package ru.kata.spring.boot_security.demo.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.RoleDao;
@@ -11,6 +13,7 @@ import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -36,9 +39,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void deleteUser(Long id) {
-        userDao.deleteUser(id);
+
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        userDao.deleteById(id);
+    }
+
+    @Override
+    public void update(Long id, User user) {
+
+    }
+
+    @Override
+    public void delete(Long id) {
+
     }
 
     @Override
@@ -46,6 +64,16 @@ public class UserServiceImpl implements UserService {
 
         return userDao.getAllUsers();
     }
+
+    @Override
+    public User findByUsername(String username) {
+        User user = userDao.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("User %s not found!", username));
+        }
+        return user;
+    }
+
 
     @Override
     @Transactional
@@ -63,8 +91,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
     @Override
     public String getPassword(Long id) {
         return userDao.getPassword(id);
@@ -74,8 +100,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-       return userDao.loadUserByUsername(username);
-   }
+        return userDao.loadUserByUsername(username);
+    }
+
     @Override
     public void updateRole(String updateRoleForm) {
 
@@ -88,41 +115,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
-
-    }
-    @Override
-    public void save (Role role) {
-
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userDao.save(user);
     }
 
 
     @Override
-    public void deleteById(Long id) {
+    public void save(Role role) {
 
     }
+
 
     @Override
-    public void update(Long id, User user) {
-
+    public User findUsername(String username) {
+        return userDao.findByUsername(username);
     }
-
-  // @Override
-   // public User getUser() {
-  //      return userDao.getUser(getUser().getId());
-  //  }
-
 
 
     @Override
     public void update(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userDao.save(user);
 
     }
-
-    @Override
-    public User findUsername(String username) {
-        return userDao.findUsername(username);
-    }
-
-
-
 }

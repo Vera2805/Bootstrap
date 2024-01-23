@@ -1,12 +1,16 @@
 package ru.kata.spring.boot_security.demo.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
+import javax.management.relation.Relation;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -17,6 +21,8 @@ public interface UserService extends UserDetailsService {
     void deleteUser(Long id);
 
     Set<User> getAllUsers();
+
+    User findByUsername(String username);
 
     void updateUser(User user);
 
@@ -42,14 +48,14 @@ public interface UserService extends UserDetailsService {
 
     void update(Long id, User user);
 
-
-    // User getUser();
-
+    void delete(Long id);
 
     void update(User user);
 
     User findUsername(String username);
 
-
 }
+
+
+
 

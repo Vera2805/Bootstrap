@@ -50,6 +50,9 @@ public class User implements UserDetails {
         this.id = id;
     }
 
+    public User(String username, String password, Set<Role> roles) {
+    }
+
     public Long getId() {
         return id;
     }
@@ -101,7 +104,6 @@ public class User implements UserDetails {
     }
 
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
@@ -127,19 +129,26 @@ public class User implements UserDetails {
         return true;
     }
 
-   // public Set<Role> getRoles() {
-   //     return roles;
-   // }
-   public Set<String> getRoleNames() {
-       return roles.stream()
-               .map(Role::getName)
-               .collect(Collectors.toSet());
-   }
+
+    public Set<String> getRoleNames() {
+        return roles.stream()
+                .map(Role::getName)
+                .collect(Collectors.toSet());
+    }
+
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
+    public String getAllRolesToString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Role role : roles) {
+            stringBuilder.append(role).append(" ");
+        }
+        return stringBuilder.toString().replaceAll("ROLE_", "").trim();
+    }
 }
+
 
 
 
